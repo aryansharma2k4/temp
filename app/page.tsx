@@ -1,6 +1,15 @@
 import Link from "next/link"
 import { ProjectCard } from "@/components/projectcard"
-import { AgentKitIcon, NextIcon, PrismaIcon, TailwindIcon } from "@/components/icons";
+import { 
+  NextIcon, ReactIcon, TSIcon, JSIcon, TailwindIcon, 
+  NodeIcon, ExpressIcon, PostgresIcon, MongoIcon, MySQLIcon, 
+  PrismaIcon, BetterAuthIcon, CloudinaryIcon, 
+  DockerIcon, GitIcon, GithubIcon, PythonIcon, JavaIcon, CppIcon, 
+  AgentKitIcon,
+  VercelIcon,
+  AppwriteIcon,
+  FirebaseIcon
+} from "@/components/icons"
 
 export default function Home() {
   const featuredProjects = [
@@ -31,7 +40,30 @@ export default function Home() {
       ]
     }
   ];
-
+  const skills = [
+    {name:"Next.js" , icon:<NextIcon/>},
+    { name: "React", icon: <ReactIcon /> },
+    { name: "TypeScript", icon: <TSIcon /> },
+    { name: "JavaScript", icon: <JSIcon /> },
+    { name: "Tailwind CSS", icon: <TailwindIcon /> },
+    { name: "Node.js", icon: <NodeIcon /> },
+    { name: "Express", icon: <ExpressIcon /> },
+    { name: "PostgreSQL", icon: <PostgresIcon /> },
+    { name: "MongoDB", icon: <MongoIcon /> },
+    { name: "MySQL", icon: <MySQLIcon /> },
+    { name: "Prisma", icon: <PrismaIcon /> },
+    { name: "Appwrite", icon: <AppwriteIcon/> },
+    { name: "Firebase", icon:<FirebaseIcon/>},
+    { name: "vercel" , icon:<VercelIcon/>},
+    { name: "Better Auth", icon: <BetterAuthIcon /> },
+    { name: "Cloudinary", icon: <CloudinaryIcon /> },
+    { name: "Docker", icon: <DockerIcon /> },
+    { name: "Github", icon: <GithubIcon /> },
+    { name: "Git", icon: <GitIcon /> },
+    { name: "Python", icon: <PythonIcon /> },
+    { name: "Java", icon: <JavaIcon /> },
+    { name: "C++", icon: <CppIcon /> },
+  ]
   return (
     <div className="w-full max-w-3xl mx-auto px-6 py-12 md:py-24">
       <section className="mb-20 space-y-6">
@@ -48,7 +80,7 @@ export default function Home() {
           Focused on writing maintainable code and solving hard problems across web and network architectures.
         </p>
       </section>
-      <section>
+      <section className="mb-15">
         <div className="flex justify-between items-end mb-6">
           <h2 className="text-xl font-bold text-slate-900 dark:text-white">Featured Projects</h2>
           <Link 
@@ -77,7 +109,25 @@ export default function Home() {
           }
         </div>
       </section>
-
+      <section>
+        <h2 className="text-2xl font-semibold text-primary mb-8">Technologies & skills</h2>
+        <div className="flex flex-wrap gap-3">
+          {skills.map((skill) => (
+            <div 
+              key={skill.name} 
+              className="group inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-secondary/50 border border-border/50 
+              hover:bg-secondary hover:border-primary/30 transition-all duration-300 cursor-default select-none text-sm px-4 py-2 rounded-full"
+            >
+              <div className="flex items-center justify-center">
+                {skill.icon}
+              </div>
+              <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">
+                {skill.name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

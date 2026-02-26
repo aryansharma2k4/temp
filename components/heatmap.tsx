@@ -1,0 +1,141 @@
+"use client"
+
+type HeatmapGridProps = {
+  data: number[];
+  themeColor: "emerald" | "blue";
+  footerMessage?: string; 
+};
+
+type MonthBlock = {
+  label: string;
+  weeks: number[][];
+};
+
+export type StatsCardProps = {
+  title: string;
+  count: string;
+  actionText: string;
+  activeDays: string;
+  streakLabel: string;
+  streakDays: string;
+  data: number[];
+  themeColor: "emerald" | "blue";
+  footerMessage?: string; 
+};
+
+const HeatmapGrid = ({ data, themeColor, footerMessage }: HeatmapGridProps) => {
+  const getColor = (count: number) => {
+    if (count === 0) return "bg-[#ebedf0] dark:bg-[#2c2c2c]";
+
+    if (themeColor === "emerald") {
+      if (count === 1) return "bg-[#9be9a8] dark:bg-[#00442a]";
+      if (count === 2) return "bg-[#40c463] dark:bg-[#006d35]";
+      if (count === 3) return "bg-[#30a14e] dark:bg-[#009b4d]";
+      return "bg-[#216e39] dark:bg-[#00cc66]";
+    } else {
+      if (count === 1) return "bg-[#b6e3ff] dark:bg-[#0a3069]";
+      if (count === 2) return "bg-[#54aeff] dark:bg-[#005cc5]";
+      if (count === 3) return "bg-[#0969da] dark:bg-[#3192e6]";
+      return "bg-[#0550ae] dark:bg-[#79c0ff]";
+    }
+  };
+
+  const weeks: number[][] = [];
+  for (let i = 0; i < data.length; i += 7) {
+    weeks.push(data.slice(i, i + 7));
+  }
+
+  const monthDistribution = [4, 4, 5, 4, 4, 5, 4, 4, 5, 4, 5, 5];
+  const monthLabels = ["Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb"];
+  
+  const monthBlocks: MonthBlock[] = [];
+  let currentWeekIndex = 0;
+
+  monthDistribution.forEach((weeksInMonth, index) => {
+    monthBlocks.push({
+      label: monthLabels[index],
+      weeks: weeks.slice(currentWeekIndex, currentWeekIndex + weeksInMonth)
+    });
+    currentWeekIndex += weeksInMonth;
+  });
+
+  return (
+    <div className="w-full flex flex-col">
+      <div className="w-full overflow-x-auto pt-2 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <div className="flex gap-2 w-max">
+          {monthBlocks.map((month, mIndex) => (
+            <div key={mIndex} className="flex flex-col gap-2">
+              <div className="grid grid-rows-7 grid-flow-col gap-[2.5px]">
+                {month.weeks.map((week, wIndex) => (
+                  week.map((count, dIndex) => (
+                    <div
+                      key={`${wIndex}-${dIndex}`}
+                      className={`w-[9px] h-[9px] rounded-[2px] ${getColor(count)}`}
+                      title={`${count} contributions`}
+                    />
+                  ))
+                ))}
+              </div>
+              <span className="text-[11px] text-[#AFB4BD] font-medium text-center">
+                {month.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="flex items-center justify-between w-full mt-1 text-[11px] text-[#AFB4BD]">
+        <span className="italic">{footerMessage}</span>
+        
+        <div className="flex items-center gap-2">
+          <span>Less</span>
+          <div className="flex gap-[2.5px]">
+            {[0, 1, 2, 3, 4].map((level) => (
+              <div key={level} className={`w-[9px] h-[9px] rounded-[2px] ${getColor(level)}`} />
+            ))}
+          </div>
+          <span>More</span>
+        </div>
+      </div>
+
+    </div>
+  );
+};
+
+export const StatsCard = ({ 
+  title, 
+  count, 
+  actionText, 
+  activeDays, 
+  streakLabel, 
+  streakDays, 
+  data, 
+  themeColor,
+  footerMessage
+}: StatsCardProps) => {
+  return (
+    <section className="space-y-4">
+      <h2 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h2>
+      
+      <div className="rounded-xl border border-slate-200 dark:border-zinc-800/80 bg-[#f9f9f9] dark:bg-[#111111] shadow-sm p-5 md:p-6 w-full">
+        
+        <div className="flex flex-wrap items-baseline gap-4 md:gap-6 text-xs text-[#AFB4BD] mb-5">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-xl font-medium text-slate-900 dark:text-white leading-none">{count}</span>
+            <span className="text-sm text-slate-500 dark:text-[#AFB4BD]">{actionText}</span>
+          </div>
+          <div className="flex items-baseline gap-1">
+            <span>Total active days:</span>
+            <span className="font-medium text-slate-900 dark:text-white">{activeDays}</span>
+          </div>
+          <div className="flex items-baseline gap-1">
+            <span>{streakLabel}:</span>
+            <span className="font-medium text-slate-900 dark:text-white">{streakDays}</span>
+          </div>
+        </div>
+
+        <HeatmapGrid data={data} themeColor={themeColor} footerMessage={footerMessage} />
+
+      </div>
+    </section>
+  );
+};

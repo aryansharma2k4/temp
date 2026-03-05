@@ -60,7 +60,7 @@ const HeatmapGrid = ({ data, themeColor, footerMessage }: HeatmapProps) => {
 
   const monthBlocks: MonthBlock[] = [];
 
-  for (let i = 11; i >= 0; i--) {
+  for (let i = 12; i >= 0; i--) {
     const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
     const year = d.getFullYear();
     const month = d.getMonth();

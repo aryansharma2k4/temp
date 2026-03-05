@@ -1,7 +1,7 @@
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
-import getLastCommitDate from "@/components/lastupdate";
+import getLastCommitDate from "@/lib/lastupdate";
 
 export default async function RootLayout({children,}: Readonly<{children: React.ReactNode;}>) {
   const lastupdate = await getLastCommitDate();

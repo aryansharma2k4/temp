@@ -1,6 +1,17 @@
 import { StatsCard } from "@/components/heatmap";
+import getleetcodemap , {LeetCodeStats} from "@/lib/leetcode-calender"
 
-export default function StatsPage() {
+export default async function StatsPage() {
+
+  const leetcodedata = await getleetcodemap()
+
+  const assignleetcodedata : LeetCodeStats = leetcodedata || {
+    maxstreak: 0,
+    activedays: 0,
+    totalsubmissions: 0,
+    finalArray: Array(365).fill(0)
+  }
+
   const generateDummyData = () =>
     Array.from({ length: 365 }, () => {
       const rand = Math.random();
@@ -9,8 +20,6 @@ export default function StatsPage() {
       if (rand > 0.4) return 1;
       return 0;
     });
-
-  const cpHeatmapData = generateDummyData();
   const githubHeatmapData = generateDummyData();
 
   return (
@@ -18,12 +27,12 @@ export default function StatsPage() {
       
       <StatsCard 
         title="Competitive Programming"
-        count="445"
+        count={String(assignleetcodedata.totalsubmissions)}
         actionText="submissions in the past year"
-        activeDays="144"
+        activeDays={String(assignleetcodedata.activedays)}
         streakLabel="Max streak"
-        streakDays="39"
-        data={cpHeatmapData}
+        streakDays={String(assignleetcodedata.maxstreak)}
+        data={assignleetcodedata.finalArray}
         themeColor="emerald"
         footerMessage="Solving problems, one test case at a time."
       />

@@ -29,19 +29,18 @@ export type StatsProps = {
 const HeatmapGrid = ({ data, themeColor, footerMessage }: HeatmapProps) => {
   const getColor = (count: number) => {
     if (count === -1) return "bg-transparent";
-
     if (count === 0) return "bg-[#ebedf0] dark:bg-[#2c2c2c]";
 
     if (themeColor === "emerald") {
-      if (count === 1) return "bg-[#9be9a8] dark:bg-[#00442a]";
-      if (count === 2) return "bg-[#40c463] dark:bg-[#006d35]";
-      if (count === 3) return "bg-[#30a14e] dark:bg-[#009b4d]";
-      return "bg-[#216e39] dark:bg-[#00cc66]";
+      if (count >= 1 && count <= 2) return "bg-[#9be9a8] dark:bg-[#00442a]"; 
+      if (count >= 3 && count <= 5) return "bg-[#40c463] dark:bg-[#006d35]"; 
+      if (count >= 6 && count <= 9) return "bg-[#30a14e] dark:bg-[#009b4d]"; 
+      return "bg-[#216e39] dark:bg-[#00cc66]";                                
     } else {
-      if (count === 1) return "bg-[#b6e3ff] dark:bg-[#0a3069]";
-      if (count === 2) return "bg-[#54aeff] dark:bg-[#005cc5]";
-      if (count === 3) return "bg-[#0969da] dark:bg-[#3192e6]";
-      return "bg-[#0550ae] dark:bg-[#79c0ff]";
+      if (count >= 1 && count <= 2) return "bg-[#b6e3ff] dark:bg-[#0a3069]"; 
+      if (count >= 3 && count <= 5) return "bg-[#54aeff] dark:bg-[#005cc5]";
+      if (count >= 6 && count <= 9) return "bg-[#0969da] dark:bg-[#3192e6]"; 
+      return "bg-[#0550ae] dark:bg-[#79c0ff]";                               
     }
   };
 

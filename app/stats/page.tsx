@@ -39,7 +39,6 @@ export default function StatsPage() {
         themeColor="blue"
         footerMessage="Building, shipping, and pushing to production."
       />
-
     </div>
   );
 }

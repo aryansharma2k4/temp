@@ -1,14 +1,16 @@
 import { StatsCard } from "@/components/heatmap";
-import getleetcodemap , {LeetCodeStats} from "@/lib/leetcode-calender"
+import getcpmap , {cpStats} from "@/lib/merge-calender";
 
 export default async function StatsPage() {
 
-  const leetcodedata = await getleetcodemap()
+  const cpdata = await getcpmap()
 
-  const assignleetcodedata : LeetCodeStats = leetcodedata || {
+  const assignleetcodedata : cpStats = cpdata || {
     maxstreak: 0,
     activedays: 0,
     totalsubmissions: 0,
+    lcrating: 0,
+    cfrating: 0,
     finalArray: Array(365).fill(0)
   }
 

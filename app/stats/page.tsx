@@ -1,7 +1,10 @@
 import { StatsCard } from "@/components/heatmap";
 import getcpmap , {cpStats} from "@/lib/merge-calender";
+import getgithubmap , {GithubStats} from "@/lib/github-calender";
 
 export default async function StatsPage() {
+
+  const gitdata = await getgithubmap()
 
   const cpdata = await getcpmap()
 
@@ -14,16 +17,12 @@ export default async function StatsPage() {
     finalArray: Array(365).fill(0)
   }
 
-  const generateDummyData = () =>
-    Array.from({ length: 365 }, () => {
-      const rand = Math.random();
-      if (rand > 0.9) return Math.floor(Math.random() * 2) + 3;
-      if (rand > 0.7) return 2;
-      if (rand > 0.4) return 1;
-      return 0;
-    });
-  const githubHeatmapData = generateDummyData();
-
+  const assigngitdata : GithubStats = gitdata || {
+    maxstreak: 0,
+    activedays: 0,
+    totalcontribution: 0,
+    finalArray: Array(365).fill(0)
+  }
   return (
     <div className="w-full max-w-3xl mx-auto px-6 py-12 space-y-12">
       
@@ -41,12 +40,12 @@ export default async function StatsPage() {
 
       <StatsCard 
         title="Development Activity"
-        count="1,204"
+        count={String(assigngitdata.totalcontribution)}
         actionText="commits in the past year"
-        activeDays="284"
+        activeDays={String(assigngitdata.activedays)}
         streakLabel="Longest streak"
-        streakDays="14"
-        data={githubHeatmapData}
+        streakDays={String(assigngitdata.maxstreak)}
+        data={assigngitdata.finalArray}
         themeColor="blue"
         footerMessage="Building, shipping, and pushing to production."
       />

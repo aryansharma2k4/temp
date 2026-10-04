@@ -1,36 +1,41 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Dharani Tharan — Portfolio
 
-## Getting Started
+Personal portfolio for a backend developer / competitive programmer (CSE @ VIT Chennai).
 
-First, run the development server:
+Built with Next.js (App Router), TypeScript, and Tailwind CSS.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Structure
+
+```txt
+/            Hero, About, Skills, Experience, Featured Projects, Stats, Contact
+/projects    Full project archive
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`/stats` and `/contact` redirect to their homepage sections.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Content (links, skills, experience, projects) lives in `lib/data.tsx`. The first two projects are featured on the homepage. Leave `liveUrl`/`imageUrl` out for a project that has no demo or screenshot; the card then hides the demo link and shows a plain preview tile.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stats
 
-## Learn More
+The GitHub contribution heatmap uses the GitHub GraphQL contribution calendar and needs a `GITHUB_TOKEN`. If the request fails, the card says "Unavailable right now" instead of showing zeros.
 
-To learn more about Next.js, take a look at the following resources:
+## Environment variables
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Every integration is optional. If its keys are missing, that piece is hidden (or says so) instead of showing fake data.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Used for |
+|----------|----------|
+| `GITHUB_TOKEN` | GitHub contribution heatmap, "last updated" date in the footer |
+| `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET`, `SPOTIFY_REFRESH_TOKEN` | "Last played" line in the hero (refresh token needs the `user-read-recently-played` scope). Shows "Nothing playing right now" until set |
+| `RESEND_API_KEY` (+ optional `CONTACT_FROM_EMAIL`) | Contact form delivery via [Resend](https://resend.com). Without a verified domain, Resend only delivers to the account owner's address, so sign up with the portfolio email |
+| `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | Visitor counter next to the quote ([Upstash Redis](https://upstash.com), free tier). **Shows a random placeholder number until set** |
 
-## Deploy on Vercel
+## Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm install
+cp .env.example .env.local   # then fill in the keys you want
+pnpm dev
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Run the streak/active-days check: `node --test lib/activity.test.mjs`

@@ -18,6 +18,6 @@ export default async function getLastCommitDate() {
       year: 'numeric' 
     });
   } catch (error) {
-    return "XXX XX, XXXX";
+    return null;
   }
 }

@@ -1,6 +1,6 @@
 type HeatmapProps = {
   data: number[];
-  themeColor: "emerald" | "blue";
+  unit: string;
   footerMessage?: string;
 };
 
@@ -16,32 +16,21 @@ type MonthBlock = {
 
 export type StatsProps = {
   title: string;
-  count: string;
-  actionText: string;
-  activeDays: string;
-  streakLabel: string;
-  streakDays: string;
-  data: number[];
-  themeColor: "emerald" | "blue";
+  unit: string; // e.g. "contributions", "submissions"
+  stats: { count: number; activeDays: number; maxStreak: number; data: number[] } | null;
   footerMessage?: string;
 };
 
-const HeatmapGrid = ({ data, themeColor, footerMessage }: HeatmapProps) => {
+const HeatmapGrid = ({ data, unit, footerMessage }: HeatmapProps) => {
   const getColor = (count: number) => {
     if (count === -1) return "bg-transparent";
-    if (count === 0) return "bg-[#ebedf0] dark:bg-[#2c2c2c]";
+    if (count === 0) return "bg-[#ededed] dark:bg-[#27272a]";
 
-    if (themeColor === "emerald") {
-      if (count >= 1 && count <= 2) return "bg-[#9be9a8] dark:bg-[#00442a]"; 
-      if (count >= 3 && count <= 5) return "bg-[#40c463] dark:bg-[#006d35]"; 
-      if (count >= 6 && count <= 9) return "bg-[#30a14e] dark:bg-[#009b4d]"; 
-      return "bg-[#216e39] dark:bg-[#00cc66]";                                
-    } else {
-      if (count >= 1 && count <= 2) return "bg-[#b6e3ff] dark:bg-[#0a3069]"; 
-      if (count >= 3 && count <= 5) return "bg-[#54aeff] dark:bg-[#005cc5]";
-      if (count >= 6 && count <= 9) return "bg-[#0969da] dark:bg-[#3192e6]"; 
-      return "bg-[#0550ae] dark:bg-[#79c0ff]";                               
-    }
+    // Light → dark gray as activity increases (inverted in dark mode).
+    if (count <= 2) return "bg-[#d0d0d0] dark:bg-[#3f3f46]";
+    if (count <= 5) return "bg-[#a3a3a3] dark:bg-[#71717a]";
+    if (count <= 9) return "bg-[#737373] dark:bg-[#a1a1aa]";
+    return "bg-[#404040] dark:bg-[#e4e4e7]";
   };
 
   const today = new Date();
@@ -108,12 +97,12 @@ const HeatmapGrid = ({ data, themeColor, footerMessage }: HeatmapProps) => {
                     <div
                       key={`${wIndex}-${dIndex}`}
                       className={`w-[9px] h-[9px] rounded-[2px] ${getColor(day.count)}`}
-                      title={day.date && day.count !== -1 ? `${day.count} contributions on ${day.date.toDateString()}` : ""}
+                      title={day.date && day.count !== -1 ? `${day.count} ${unit} on ${day.date.toDateString()}` : ""}
                     />
                   ))
                 ))}
               </div>
-              <span className="text-[11px] text-[#AFB4BD] font-medium text-center">
+              <span className="text-[11px] text-neutral-400 dark:text-zinc-500 font-medium text-center">
                 {month.label}
               </span>
             </div>
@@ -121,8 +110,8 @@ const HeatmapGrid = ({ data, themeColor, footerMessage }: HeatmapProps) => {
         </div>
       </div>
 
-      <div className="flex items-center justify-between w-full mt-1 text-[11px] text-[#AFB4BD]">
-        <span className="italic">{footerMessage}</span>
+      <div className="flex items-center justify-between w-full mt-1 text-[11px] text-neutral-400 dark:text-zinc-500">
+        <span className="hidden sm:inline">{footerMessage}</span>
 
         <div className="flex items-center gap-2">
           <span>Less</span>
@@ -138,32 +127,27 @@ const HeatmapGrid = ({ data, themeColor, footerMessage }: HeatmapProps) => {
   );
 };
 
-export const StatsCard = ({title,count,actionText,activeDays,streakLabel,
-  streakDays,data,themeColor,footerMessage}: StatsProps) => {
+export const StatsCard = ({ title, unit, stats, footerMessage }: StatsProps) => {
   return (
-    <section className="space-y-4">
-      <h2 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h2>
-
-      <div className="rounded-xl border border-slate-200 dark:border-zinc-800/80 bg-[#f9f9f9] dark:bg-[#111111] shadow-sm p-5 md:p-6 w-full">
-
-        <div className="flex flex-wrap items-baseline gap-4 md:gap-6 text-xs text-[#AFB4BD] mb-5">
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-xl font-medium text-slate-900 dark:text-white leading-none">{count}</span>
-            <span className="text-sm text-slate-500 dark:text-[#AFB4BD]">{actionText}</span>
+    <div className="w-full rounded-2xl border border-neutral-200 bg-white p-5 md:p-6 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+        <h3 className="text-base font-medium text-neutral-900 dark:text-white">{title}</h3>
+        {stats && (
+          <div className="flex flex-wrap items-baseline gap-x-5 gap-y-1 text-xs text-neutral-500 dark:text-zinc-400">
+            <span>
+              <span className="text-base font-medium text-neutral-900 dark:text-white">{stats.count.toLocaleString("en-US")}</span> {unit} in the past year
+            </span>
+            <span>Active days: <span className="font-medium text-neutral-900 dark:text-white">{stats.activeDays}</span></span>
+            <span>Longest streak: <span className="font-medium text-neutral-900 dark:text-white">{stats.maxStreak}</span></span>
           </div>
-          <div className="flex items-baseline gap-1">
-            <span>Total active days:</span>
-            <span className="font-medium text-slate-900 dark:text-white">{activeDays}</span>
-          </div>
-          <div className="flex items-baseline gap-1">
-            <span>{streakLabel}:</span>
-            <span className="font-medium text-slate-900 dark:text-white">{streakDays}</span>
-          </div>
-        </div>
-
-        <HeatmapGrid data={data} themeColor={themeColor} footerMessage={footerMessage} />
-
+        )}
       </div>
-    </section>
+
+      {stats ? (
+        <HeatmapGrid data={stats.data} unit={unit} footerMessage={footerMessage} />
+      ) : (
+        <p className="py-10 text-center text-sm text-neutral-500 dark:text-zinc-400">Unavailable right now.</p>
+      )}
+    </div>
   );
 };

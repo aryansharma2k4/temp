@@ -2,9 +2,6 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: [
-      "api.microlink.io", 
-    ],
     remotePatterns: [
       {
         protocol: 'https',
@@ -14,11 +11,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'avatars.githubusercontent.com',
       },
-      {
-        protocol: 'https',
-        hostname: 'github.com',
-      }
     ],
+  },
+  // Old standalone pages now live as homepage sections.
+  async redirects() {
+    return [
+      { source: '/stats', destination: '/#stats', permanent: true },
+      { source: '/contact', destination: '/#contact', permanent: true },
+    ];
   },
 };
 

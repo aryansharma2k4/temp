@@ -24,8 +24,11 @@ import {
   SiPython,
   SiCplusplus,
   SiFirebase,
+  SiSpringboot,
+  SiKeycloak,
+  SiMqtt,
 } from "react-icons/si";
-import { FaJava, FaNetworkWired, FaKey } from "react-icons/fa";
+import { FaJava, FaNetworkWired, FaKey, FaDatabase } from "react-icons/fa";
 import { BsStars } from "react-icons/bs";
 
 export const NextIcon = () => <SiNextdotjs className="w-3.5 h-3.5 text-black dark:text-white" />;
@@ -56,4 +59,8 @@ export const CloudinaryIcon = () => <SiCloudinary className="w-4 h-4" color="#34
 export const PythonIcon = () => <SiPython className="w-3.5 h-3.5" color="#3776AB" />;
 export const CppIcon = () => <SiCplusplus className="w-3.5 h-3.5" color="#00599C" />;
 export const BetterAuthIcon = () => <FaKey className="w-3 h-3 text-slate-700 dark:text-slate-300" />; 
-export const FirebaseIcon = () => <SiFirebase className="w-3 h-3 text-slate-700 dark:text-slate-300" />
+export const FirebaseIcon = () => <SiFirebase className="w-3.5 h-3.5" color="#FFCA28" />;
+export const SpringBootIcon = () => <SiSpringboot className="w-3.5 h-3.5" color="#6DB33F" />;
+export const KeycloakIcon = () => <SiKeycloak className="w-3.5 h-3.5 text-[#4D4D4D] dark:text-zinc-300" />;
+export const MqttIcon = () => <SiMqtt className="w-3.5 h-3.5 text-[#660066] dark:text-purple-300" />;
+export const TimescaleIcon = () => <FaDatabase className="w-3.5 h-3.5" color="#FDB515" />;
